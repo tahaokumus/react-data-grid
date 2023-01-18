@@ -6,13 +6,13 @@ import DataEditor, {
 	NumberCell
 } from '@glideapps/glide-data-grid';
 
-const colCount = 300;
+const colCount = 301;
 const rowCount = 30001;
 
 function createData(): Array<number> {
 	const arr = [] as Array<number>;
-	for (let col = 0; col < colCount; col++) {
-		for (let row = 1; row < rowCount; row++) {
+	for (let row = 1; row < rowCount; row++) {
+		for (let col = 1; col < colCount; col++) {
 			arr.push(row * (col + 1));
 		}
 	}
@@ -23,7 +23,7 @@ function createData(): Array<number> {
 const tableData = createData();
 
 function getTableData(col: number, row: number) {
-	return tableData[row * rowCount + col].toString();
+	return tableData[col * colCount + row];
 }
 
 export default function Grid() {
@@ -31,7 +31,7 @@ export default function Grid() {
 
 	const getData = React.useCallback<DataEditorProps['getCellContent']>(
 		([col, row]: readonly [number, number]) => {
-			const data = tableData[row * rowCount + col];
+			const data = getTableData(col, row);
 			return {
 				kind: GridCellKind.Number,
 				allowOverlay: true,
@@ -78,13 +78,13 @@ export default function Grid() {
 						setContextMenu({
 							x: event.bounds.x + event.localEventX,
 							y: event.bounds.y + event.localEventY,
-							data: getTableData(col, row)
+							data: getTableData(col, row).toString()
 						});
 					}}
 					onCellEdited={([col, row]: readonly [number, number], newValue) => {
-						const val = newValue as NumberCell;
 						console.log(newValue);
-						tableData[row * rowCount + col] = val.data ?? 0;
+						const val = newValue as NumberCell;
+						tableData[col * colCount + row] = val.data ?? 0;
 					}}
 				/>
 				{contextMenu.x > 0 && contextMenu.y > 0 && (
