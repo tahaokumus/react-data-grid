@@ -2,20 +2,43 @@ import React, { useState } from 'react';
 import DataEditor, {
 	DataEditorProps,
 	GridCellKind,
-	GridColumn
+	GridColumn,
+	NumberCell
 } from '@glideapps/glide-data-grid';
+
+const colCount = 300;
+const rowCount = 30001;
+
+function createData(): Array<number> {
+	const arr = [] as Array<number>;
+	for (let col = 0; col < colCount; col++) {
+		for (let row = 1; row < rowCount; row++) {
+			arr.push(row * (col + 1));
+		}
+	}
+
+	return arr;
+}
+
+const tableData = createData();
+
+function getTableData(col: number, row: number) {
+	return tableData[row * rowCount + col].toString();
+}
 
 export default function Grid() {
 	const [contextMenu, setContextMenu] = useState({ x: 0, y: 0, data: '' });
 
 	const getData = React.useCallback<DataEditorProps['getCellContent']>(
-		(cell) => ({
-			kind: GridCellKind.Text,
-			allowOverlay: true,
-			readonly: true,
-			data: `${cell[0]},${cell[1]}`,
-			displayData: `${cell[0]},${cell[1]}`
-		}),
+		([col, row]: readonly [number, number]) => {
+			const data = tableData[row * rowCount + col];
+			return {
+				kind: GridCellKind.Number,
+				allowOverlay: true,
+				data,
+				displayData: data.toString()
+			};
+		},
 		[]
 	);
 
@@ -50,13 +73,18 @@ export default function Grid() {
 					height={'100vh'}
 					columns={cols}
 					rows={30000}
-					onCellContextMenu={(cell, event) => {
-						console.log(cell, event);
+					onCellContextMenu={([col, row]: readonly [number, number], event) => {
+						console.log(event);
 						setContextMenu({
 							x: event.bounds.x + event.localEventX,
 							y: event.bounds.y + event.localEventY,
-							data: cell.toString()
+							data: getTableData(col, row)
 						});
+					}}
+					onCellEdited={([col, row]: readonly [number, number], newValue) => {
+						const val = newValue as NumberCell;
+						console.log(newValue);
+						tableData[row * rowCount + col] = val.data ?? 0;
 					}}
 				/>
 				{contextMenu.x > 0 && contextMenu.y > 0 && (

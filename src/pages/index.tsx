@@ -21,6 +21,7 @@ export default function Home() {
 			<main className={styles.main}>
 				<Grid />
 			</main>
+			<div id='portal' />
 		</>
 	);
 }
