@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
 	return (
@@ -11,10 +12,10 @@ export default function Home() {
 			</Head>
 			<main>
 				<p>
-					<a href='/text-styling'>Text Styling</a>
+					<Link href={'/text-styling'}>Text Styling</Link>
 				</p>
 				<p>
-					<a href='/simple-grid'>Simple Grid</a>
+					<Link href={'/simple-grid'}>Simple Grid</Link>
 				</p>
 			</main>
 		</>
