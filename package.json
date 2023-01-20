@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@glideapps/glide-data-grid": "^5.2.1",
+    "@glideapps/glide-data-grid-source": "^5.2.1",
+    "@linaria/react": "^4.3.3",
     "@next/font": "13.1.2",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",

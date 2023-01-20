@@ -1,4 +1,13 @@
 import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
+import dynamic from 'next/dynamic';
+
+const Grid = dynamic(
+	() => {
+		return import('@/components/TextStyling');
+	},
+	{ ssr: false }
+);
 
 export default function Home() {
 	return (
@@ -9,14 +18,10 @@ export default function Home() {
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
-			<main>
-				<p>
-					<a href='/text-styling'>Text Styling</a>
-				</p>
-				<p>
-					<a href='/simple-grid'>Simple Grid</a>
-				</p>
+			<main className={styles.main}>
+				<Grid />
 			</main>
+			<div id='portal' />
 		</>
 	);
 }
